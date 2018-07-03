@@ -17,8 +17,7 @@ COPY_AUTHORIZED_KEYS_FROM_ROOT=true
 #     "ssh-rsa AAAAB..."
 #     "ssh-rsa AAAAB..."
 # )
-OTHER_PUBLIC_KEYS_TO_ADD=(
-)
+ 
 
 ####################
 ### SCRIPT LOGIC ###
@@ -53,11 +52,7 @@ if [ "${COPY_AUTHORIZED_KEYS_FROM_ROOT}" = true ]; then
     cp /root/.ssh/authorized_keys "${home_directory}/.ssh"
 fi
 
-# Add additional provided public keys
-for pub_key in "${OTHER_PUBLIC_KEYS_TO_ADD[@]}"; do
-    echo "${pub_key}" >> "${home_directory}/.ssh/authorized_keys"
-done
-
+ 
 # Adjust SSH configuration ownership and permissions
 chmod 0700 "${home_directory}/.ssh"
 chmod 0600 "${home_directory}/.ssh/authorized_keys"
@@ -71,4 +66,6 @@ fi
 
 # Add exception for SSH and then enable UFW firewall
 ufw allow OpenSSH
+ufw allow http
+ufw allow https
 ufw --force enable
